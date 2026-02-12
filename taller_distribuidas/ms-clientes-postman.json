@@ -1,0 +1,316 @@
+{
+  "info": {
+    "name": "ms-clientes API",
+    "description": "Colección de pruebas para ms-clientes - Gestión de Personas y Vehículos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "kongUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "personaId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "PERSONAS",
+      "item": [
+        {
+          "name": "1. Listar todas las personas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/personas",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "personas"]
+            }
+          }
+        },
+        {
+          "name": "2. Crear Persona Natural",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificacion\": \"1751704196\",\n  \"nombre\": \"Javier\",\n  \"apellido\": \"Ramos\",\n  \"email\": \"javier.ramos@example.com\",\n  \"telefono\": \"0998765432\",\n  \"direccion\": \"Calle Principal 123, Quito\",\n  \"fechaNacimiento\": \"1995-05-12T00:00:00\",\n  \"genero\": \"MASCULINO\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/personas/natural",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "personas", "natural"]
+            }
+          }
+        },
+        {
+          "name": "3. Crear Persona Jurídica",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificacion\": \"1234567890001\",\n  \"nombre\": \"Empresa ABC\",\n  \"email\": \"contacto@empresaabc.com\",\n  \"telefono\": \"0212345678\",\n  \"direccion\": \"Av. Empresarial 456, Quito\",\n  \"razonSocial\": \"ABC Transportes S.A.\",\n  \"representanteLegal\": \"Carlos García López\",\n  \"actividadEconomica\": \"Transporte de Carga\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/personas/juridica",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "personas", "juridica"]
+            }
+          }
+        },
+        {
+          "name": "4. Listar solo Personas Naturales",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/personas/naturales",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "personas", "naturales"]
+            }
+          }
+        },
+        {
+          "name": "5. Actualizar Persona Natural",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificacion\": \"1751704196\",\n  \"nombre\": \"Javier Actualizado\",\n  \"apellido\": \"Ramos\",\n  \"email\": \"javier.actualizado@example.com\",\n  \"telefono\": \"0998765432\",\n  \"direccion\": \"Calle Nueva 456, Quito\",\n  \"fechaNacimiento\": \"1995-05-12T00:00:00\",\n  \"genero\": \"MASCULINO\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/personas/natural/{{personaId}}",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "personas", "natural", "{{personaId}}"]
+            }
+          }
+        },
+        {
+          "name": "6. Actualizar Persona Jurídica",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"identificacion\": \"1234567890001\",\n  \"nombre\": \"Empresa ABC\",\n  \"email\": \"nuevo.contacto@empresaabc.com\",\n  \"telefono\": \"0212345678\",\n  \"direccion\": \"Av. Empresarial 456, Quito\",\n  \"razonSocial\": \"ABC Transportes S.A.\",\n  \"representanteLegal\": \"Carlos García López\",\n  \"actividadEconomica\": \"Transporte de Carga y Pasajeros\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/personas/juridica/{{personaId}}",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "personas", "juridica", "{{personaId}}"]
+            }
+          }
+        },
+        {
+          "name": "7. Eliminar Persona",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/personas/{{personaId}}",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "personas", "{{personaId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "VEHÍCULOS",
+      "item": [
+        {
+          "name": "1. Listar todos los vehículos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vehiculos",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "vehiculos"]
+            }
+          }
+        },
+        {
+          "name": "2. Crear Automóvil",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"PBC-0123\",\n  \"marca\": \"Toyota\",\n  \"modelo\": \"Corolla\",\n  \"color\": \"Blanco\",\n  \"anioFabricacion\": 2023,\n  \"idPropietario\": \"REEMPLAZAR-CON-UUID-PERSONA\",\n  \"numeroPuertas\": 4,\n  \"numeroAsientos\": 5,\n  \"tipoAutomovil\": \"SEDAN\",\n  \"traccion\": \"DELANTERA\",\n  \"tipoCombustible\": \"GASOLINA\",\n  \"cilindraje\": 1800.0,\n  \"capacidadTanque\": 50.0,\n  \"suspensionDeportiva\": false,\n  \"tieneBalde\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/vehiculos/automovil",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "vehiculos", "automovil"]
+            }
+          }
+        },
+        {
+          "name": "3. Crear Moto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"ABC-0456\",\n  \"marca\": \"Yamaha\",\n  \"modelo\": \"YZF-R3\",\n  \"color\": \"Rojo\",\n  \"anioFabricacion\": 2023,\n  \"idPropietario\": \"REEMPLAZAR-CON-UUID-PERSONA\",\n  \"numeroRuedas\": 2,\n  \"tipo\": \"DEPORTIVA\",\n  \"tipoCombustible\": \"GASOLINA\",\n  \"cilindraje\": 321,\n  \"capacidadTanque\": 42.0,\n  \"tieneCasco\": true,\n  \"tieneAbs\": true,\n  \"tipoFrenos\": \"HIDRAULICOS\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/vehiculos/moto",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "vehiculos", "moto"]
+            }
+          }
+        },
+        {
+          "name": "4. Actualizar Automóvil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"PBC-0123\",\n  \"marca\": \"Toyota\",\n  \"modelo\": \"Corolla\",\n  \"color\": \"Negro\",\n  \"anioFabricacion\": 2023,\n  \"idPropietario\": \"REEMPLAZAR-CON-UUID-PERSONA\",\n  \"numeroPuertas\": 4,\n  \"numeroAsientos\": 5,\n  \"tipoAutomovil\": \"SEDAN\",\n  \"traccion\": \"DELANTERA\",\n  \"tipoCombustible\": \"GASOLINA\",\n  \"cilindraje\": 1800.0,\n  \"capacidadTanque\": 50.0,\n  \"suspensionDeportiva\": true,\n  \"tieneBalde\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/vehiculos/automovil/REEMPLAZAR-CON-UUID-VEHICULO",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "vehiculos", "automovil", "REEMPLAZAR-CON-UUID-VEHICULO"]
+            }
+          }
+        },
+        {
+          "name": "5. Actualizar Moto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placa\": \"ABC-0456\",\n  \"marca\": \"Yamaha\",\n  \"modelo\": \"YZF-R3\",\n  \"color\": \"Azul\",\n  \"anioFabricacion\": 2023,\n  \"idPropietario\": \"REEMPLAZAR-CON-UUID-PERSONA\",\n  \"numeroRuedas\": 2,\n  \"tipo\": \"DEPORTIVA\",\n  \"tipoCombustible\": \"GASOLINA\",\n  \"cilindraje\": 321,\n  \"capacidadTanque\": 42.0,\n  \"tieneCasco\": true,\n  \"tieneAbs\": true,\n  \"tipoFrenos\": \"HIDRAULICOS\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/vehiculos/moto/REEMPLAZAR-CON-UUID-VEHICULO",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "vehiculos", "moto", "REEMPLAZAR-CON-UUID-VEHICULO"]
+            }
+          }
+        },
+        {
+          "name": "6. Buscar vehículo por placa",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vehiculos/placa/PBC-0123",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "vehiculos", "placa", "PBC-0123"]
+            }
+          }
+        },
+        {
+          "name": "7. Vehículos por propietario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vehiculos/propietario/REEMPLAZAR-CON-UUID-PERSONA",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "vehiculos", "propietario", "REEMPLAZAR-CON-UUID-PERSONA"]
+            }
+          }
+        },
+        {
+          "name": "8. Vehículos por marca",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vehiculos/marca/Toyota",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "vehiculos", "marca", "Toyota"]
+            }
+          }
+        },
+        {
+          "name": "9. Vehículos activos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/vehiculos/activos",
+              "host": ["localhost"],
+              "port": "8081",
+              "path": ["api", "vehiculos", "activos"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,358 @@
+{
+  "info": {
+    "name": "Taller Distribuidas - APIs",
+    "description": "Colección completa de pruebas para ms-clientes, ms-tickets y notificacion-service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl_clientes",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "baseUrl_tickets",
+      "value": "http://localhost:4000",
+      "type": "string"
+    },
+    {
+      "key": "baseUrl_notifications",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "personaId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "ticketId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "MS-CLIENTES",
+      "item": [
+        {
+          "name": "PERSONAS",
+          "item": [
+            {
+              "name": "Listar todas las personas",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl_clientes}}/api/personas",
+                  "host": ["localhost"],
+                  "port": "8081",
+                  "path": ["api", "personas"]
+                }
+              }
+            },
+            {
+              "name": "Crear Persona Natural",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tipoPersona\": \"NATURAL\",\n  \"razonSocial\": \"Juan Pérez\",\n  \"identificacion\": \"1234567890\",\n  \"email\": \"juan@example.com\",\n  \"direccion\": \"Calle Principal 123\",\n  \"telefono\": \"+593987654321\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl_clientes}}/api/personas",
+                  "host": ["localhost"],
+                  "port": "8081",
+                  "path": ["api", "personas"]
+                }
+              }
+            },
+            {
+              "name": "Crear Persona Jurídica",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tipoPersona\": \"JURIDICA\",\n  \"razonSocial\": \"Empresa XYZ S.A.\",\n  \"identificacion\": \"0987654321\",\n  \"email\": \"empresa@example.com\",\n  \"direccion\": \"Avenida Comercial 456\",\n  \"telefono\": \"+593912345678\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl_clientes}}/api/personas",
+                  "host": ["localhost"],
+                  "port": "8081",
+                  "path": ["api", "personas"]
+                }
+              }
+            },
+            {
+              "name": "Obtener Persona por ID",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl_clientes}}/api/personas/{{personaId}}",
+                  "host": ["localhost"],
+                  "port": "8081",
+                  "path": ["api", "personas", "{{personaId}}"]
+                }
+              }
+            },
+            {
+              "name": "Actualizar Persona",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"razonSocial\": \"Juan Pérez Actualizado\",\n  \"email\": \"juan.nuevo@example.com\",\n  \"direccion\": \"Calle Nueva 789\",\n  \"telefono\": \"+593999999999\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl_clientes}}/api/personas/{{personaId}}",
+                  "host": ["localhost"],
+                  "port": "8081",
+                  "path": ["api", "personas", "{{personaId}}"]
+                }
+              }
+            },
+            {
+              "name": "Eliminar Persona",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl_clientes}}/api/personas/{{personaId}}",
+                  "host": ["localhost"],
+                  "port": "8081",
+                  "path": ["api", "personas", "{{personaId}}"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "VEHÍCULOS",
+          "item": [
+            {
+              "name": "Listar todos los vehículos",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl_clientes}}/api/vehiculos",
+                  "host": ["localhost"],
+                  "port": "8081",
+                  "path": ["api", "vehiculos"]
+                }
+              }
+            },
+            {
+              "name": "Crear Vehículo",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"personaId\": \"{{personaId}}\",\n  \"marca\": \"Toyota\",\n  \"modelo\": \"Corolla\",\n  \"año\": 2023,\n  \"placa\": \"ABC-1234\",\n  \"vin\": \"JTHBP5C29A5053863\",\n  \"tipoVehiculo\": \"SEDAN\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl_clientes}}/api/vehiculos",
+                  "host": ["localhost"],
+                  "port": "8081",
+                  "path": ["api", "vehiculos"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "MS-TICKETS (GraphQL)",
+      "item": [
+        {
+          "name": "GraphQL Query - Listar Tickets",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  getAllTickets {\n    id\n    title\n    description\n    status\n    priority\n    createdAt\n    updatedAt\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl_tickets}}/graphql",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GraphQL Mutation - Crear Ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  createTicket(input: {\n    title: \"Ticket de prueba\"\n    description: \"Descripción del ticket\"\n    priority: HIGH\n    assignedToPersonaId: 1\n  }) {\n    id\n    title\n    description\n    status\n    priority\n    createdAt\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl_tickets}}/graphql",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GraphQL Query - Obtener Ticket por ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  getTicketById(id: 1) {\n    id\n    title\n    description\n    status\n    priority\n    assignedToPersona {\n      id\n      razonSocial\n      email\n    }\n    createdAt\n    updatedAt\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl_tickets}}/graphql",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GraphQL Mutation - Actualizar Estado Ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "mutation {\n  updateTicketStatus(id: 1, status: IN_PROGRESS) {\n    id\n    title\n    status\n    updatedAt\n  }\n}"
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl_tickets}}/graphql",
+              "host": ["localhost"],
+              "port": "4000",
+              "path": ["graphql"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "NOTIFICACION-SERVICE (NestJS)",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl_notifications}}/health",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["health"]
+            }
+          }
+        },
+        {
+          "name": "Listar todas las notificaciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl_notifications}}/api/notifications",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notifications"]
+            }
+          }
+        },
+        {
+          "name": "Crear Notificación",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"title\": \"Notificación de Prueba\",\n  \"message\": \"Este es un mensaje de prueba\",\n  \"type\": \"INFO\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl_notifications}}/api/notifications",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notifications"]
+            }
+          }
+        },
+        {
+          "name": "Obtener Notificación por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl_notifications}}/api/notifications/1",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["api", "notifications", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

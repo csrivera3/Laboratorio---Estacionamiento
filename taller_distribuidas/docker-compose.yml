@@ -1,0 +1,188 @@
+version: '3.9'
+
+services:
+  # Base de datos PostgreSQL principal
+  postgres-main:
+    image: postgres:15-alpine
+    container_name: postgres-main
+    environment:
+      POSTGRES_DB: db_clientes
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_main_data:/var/lib/postgresql/data
+      - ./ms-clientes/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_clientes"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - distributed_network
+
+  # Base de datos PostgreSQL para tickets
+  postgres-tickets:
+    image: postgres:15-alpine
+    container_name: postgres-tickets
+    environment:
+      POSTGRES_DB: db_tickets
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_tickets_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_tickets"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - distributed_network
+
+  # Base de datos PostgreSQL para notificaciones
+  postgres-notifications:
+    image: postgres:15-alpine
+    container_name: postgres-notifications
+    environment:
+      POSTGRES_DB: db_notifications
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5437:5432"
+    volumes:
+      - postgres_notifications_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d db_notifications"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - distributed_network
+
+  # RabbitMQ para mensajería
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - distributed_network
+
+  # MS-CLIENTES - Microservicio de Gestión de Clientes y Vehículos
+  ms-clientes:
+    build:
+      context: ./ms-clientes
+      dockerfile: Dockerfile
+    container_name: ms-clientes
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-main:5432/db_clientes
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8081
+    depends_on:
+      postgres-main:
+        condition: service_healthy
+    networks:
+      - distributed_network
+    restart: unless-stopped
+
+  # MS-TICKETS - Microservicio de Tickets (GraphQL)
+  ms-tickets:
+    build:
+      context: ./ms-tickets
+      dockerfile: Dockerfile
+    container_name: ms-tickets
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DB_HOST: postgres-tickets
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 123456
+      DB_NAME: db_tickets
+      ZONE_SERVICE_URL: http://zone-core:8080/api
+      USER_SERVICE_URL: http://ms-clientes:8081/api
+      NOTIFICATION_SERVICE_URL: http://notificacion-service:3000
+    depends_on:
+      postgres-tickets:
+        condition: service_healthy
+    networks:
+      - distributed_network
+    restart: unless-stopped
+
+  # NOTIFICACION-SERVICE - Microservicio de Notificaciones (NestJS)
+  notificacion-service:
+    build:
+      context: ./notificacion-service
+      dockerfile: Dockerfile
+    container_name: notificacion-service
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_HOST: postgres-notifications
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: 123456
+      DB_NAME: db_notifications
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      LOG_LEVEL: debug
+    depends_on:
+      postgres-notifications:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - distributed_network
+    restart: unless-stopped
+
+  # ZONE-CORE - Microservicio de Zonas (Java/Spring)
+  zone-core:
+    build:
+      context: ./zone_core
+      dockerfile: Dockerfile
+    container_name: zone-core
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-main:5432/db_clientes
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 123456
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8080
+    depends_on:
+      postgres-main:
+        condition: service_healthy
+    networks:
+      - distributed_network
+    restart: unless-stopped
+
+volumes:
+  postgres_main_data:
+  postgres_tickets_data:
+  postgres_notifications_data:
+  rabbitmq_data:
+
+networks:
+  distributed_network:
+    driver: bridge
